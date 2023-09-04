@@ -1,4 +1,6 @@
-package tokens
+package token
+
+import "strings"
 
 type TokenType string
 
@@ -12,8 +14,9 @@ const (
 	EOF     = "EOF"
 
 	// Identifiers + Literals
-	IDENT = "IDENT"
-	INT   = "INT"
+	IDENT  = "IDENT"
+	INT    = "INT"
+	STRING = "STRING"
 
 	// Operators
 	LT = "<"
@@ -24,28 +27,37 @@ const (
 	LT_EQ  = "<="
 	GT_EQ  = ">="
 
+	CONTAINS = "CONTAINS"
+	AND      = "AND"
+	OR       = "OR"
+	NOT      = "NOT"
+
 	// Delimiters
 	LPAREN = "("
 	RPAREN = ")"
 
 	// Keywords
-	AND   = "AND"
-	OR    = "OR"
 	TRUE  = "TRUE"
 	FALSE = "FALSE"
 	NULL  = "NULL"
 )
 
 var keywords = map[string]TokenType{
-	"and":   AND,
-	"or":    OR,
+	"contains": CONTAINS,
+	"and":      AND,
+	"or":       OR,
+	"not":      NOT,
+	// "in":       IN,
+
 	"true":  TRUE,
 	"false": FALSE,
 	"null":  NULL,
 }
 
 func LookupIdent(ident string) TokenType {
-	if tok, ok := keywords[ident]; ok {
+	lident := strings.ToLower(ident)
+
+	if tok, ok := keywords[lident]; ok {
 		return tok
 	}
 	return IDENT
